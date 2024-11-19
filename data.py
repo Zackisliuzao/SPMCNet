@@ -46,21 +46,17 @@ def cv_random_flip_1(img, label, depth):
 
 
 def cv_random_flip_2(img, label, depth):
-    # 定义翻转选项列表
     actions = ['none', 'horizontal', 'vertical']
     flip_action = random.choice(actions)
 
     if flip_action == 'horizontal':
-        # 水平翻转
         img = img.transpose(Image.FLIP_LEFT_RIGHT)
         label = label.transpose(Image.FLIP_LEFT_RIGHT)
         depth = depth.transpose(Image.FLIP_LEFT_RIGHT)
     elif flip_action == 'vertical':
-        # 垂直翻转
         img = img.transpose(Image.FLIP_TOP_BOTTOM)
         label = label.transpose(Image.FLIP_TOP_BOTTOM)
         depth = depth.transpose(Image.FLIP_TOP_BOTTOM)
-    # 如果 flip_action == 'none'，则不进行任何翻转
 
     return img, label, depth
 
@@ -78,12 +74,9 @@ def randomCrop(image, label, depth):
 
 
 def randomRotation(image, label, depth):
-    # 定义旋转角度列表
     angles = [0, 90, 180, 270]
-    # 随机选择一个角度
     random_angle = random.choice(angles)
 
-    # 如果随机角度不是0（即需要旋转）
     if random_angle != 0:
         image = image.rotate(random_angle, Image.BICUBIC, expand=True)
         label = label.rotate(random_angle, Image.NEAREST, expand=True)
@@ -173,7 +166,7 @@ class SalObjDataset(data.Dataset):
         image, gt, depth = randomRotation(image, gt, depth)
         image = colorEnhance(image)
 
-        # 转换到numpy数组和调整大小
+        # Convert to numpy array and resize
         np_img = np.array(image)
         np_img = cv2.resize(np_img, dsize=(self.trainsize, self.trainsize), interpolation=cv2.INTER_LINEAR)
 
@@ -199,15 +192,15 @@ class SalObjDataset(data.Dataset):
             buffer[buffer == i] = 1
 
             if np.sum(buffer) != 0:
-                # 计算与前景的重叠情况
+                # Calculate overlap with foreground
                 foreground_overlap = np.sum(buffer * (np_gt == 1))
-                # 计算与背景的重叠情况
+                # Calculate overlap with the background
                 background_overlap = np.sum(buffer * (np_gt == 2))
 
-                # 如果主要是前景重叠，标记为前景
+                # If it is mainly foreground overlap, mark it as foreground
                 if foreground_overlap > background_overlap and foreground_overlap > 1:
                     label_gt = np.maximum(label_gt, buffer)
-                # 否则保持为背景或者不标记
+                # Otherwise, keep it as background or unmarked
 
         for i in range(1, 100 + 1):
             buffer = np.copy(SS_map_depth)
@@ -316,7 +309,7 @@ class test_dataset:
         image = self.rgb_loader(self.images[self.index])
         image = self.img_transform(image).unsqueeze(0)
         gt = self.binary_loader(self.gts[self.index])
-        depth = self.rgb_loader(self.depths[self.index])  # 加载深度图
+        depth = self.rgb_loader(self.depths[self.index]) 
         depth = self.depth_transform(depth).unsqueeze(0)
         name = self.images[self.index].split('/')[-1]
         if name.endswith('.jpg'):
