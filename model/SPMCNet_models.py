@@ -212,7 +212,7 @@ class SPMCNet_VGG(nn.Module):
         self.backbone_rgb.load_state_dict(torch.load('./model/pvt_v2_b2.pth'), strict=False)
         self.backbone_depth.load_state_dict(torch.load('./model/pvt_v2_b2.pth'), strict=False)
 
-        # 解码
+
         self.hff = HFF_high(channel=64)
         self.hff_d = HFF_high(channel=64)
 
@@ -228,7 +228,7 @@ class SPMCNet_VGG(nn.Module):
         self.last_c = last_conv(out_dim=64)
         self.last_d = last_conv(out_dim=64)
 
-        # 融合
+
         self.ca1 = CrossAttention(64, p=11)
         self.ca2 = CrossAttention(128, p=11)
         self.ca3 = CrossAttention(320, p=11)
@@ -248,12 +248,12 @@ class SPMCNet_VGG(nn.Module):
         fusion3 = self.ca3(F3, F3_d)
         fusion4 = self.ca4(F4, F4_d)
 
-        # 统一通道
+
         F4_Sea, F3_Sea, F2_Sea, F1_Sea = self.last_c(fusion4, fusion3, fusion2, fusion1)
 
         F4_d_Sea, F3_d_Sea, F2_d_Sea, F1_d_Sea = self.last_d(F4_d, F3_d, F2_d, F1_d)
 
-        # 解码
+
         y4, y3, y2, y1 = self.hff(F4_Sea, F3_Sea, F2_Sea, F1_Sea)
         y4 = self.conv_pre_f4(y4)
         y3 = self.conv_pre_f3(y3)
