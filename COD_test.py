@@ -8,7 +8,6 @@ import time
 
 from model.SPMCNet_models import SPMCNet_VGG
 from data import test_dataset
-# 改
 import imageio
 
 torch.cuda.set_device(-1)
@@ -16,7 +15,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--testsize', type=int, default=352, help='testing size')
 opt = parser.parse_args()
 
-# 改
 dataset_path = './dataset/COD_CAMO/test/'
 
 model = SPMCNet_VGG()
@@ -31,7 +29,6 @@ for dataset in test_datasets:
     save_path = './results/VGG/' + dataset + '/'
     if not os.path.exists(save_path):
         os.makedirs(save_path)
-    # 改
     image_root = dataset_path + '/image/'
     print(dataset)
     gt_root = dataset_path + '/gt/'
@@ -51,7 +48,6 @@ for dataset in test_datasets:
         res = F.interpolate(res, size=gt.shape, mode='bilinear', align_corners=False)
         res = res.sigmoid().data.cpu().numpy().squeeze()
         res = (res - res.min()) / (res.max() - res.min() + 1e-8)
-        # 改
         res = (res * 255).astype(np.uint8)
         imageio.imsave(save_path + name, res)
         if i == test_loader.size - 1:
