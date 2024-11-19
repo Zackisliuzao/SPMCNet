@@ -41,7 +41,6 @@ model = SPMCNet_VGG()
 model.cuda()
 params = model.parameters()
 optimizer = torch.optim.NAdam(params, opt.lr)
-# 改
 image_root = './dataset/COD_SC/train/image/'
 gt_root = './dataset/COD_SC/train/gt/'
 depth_root = './dataset/COD_SC/train/depth/'
