@@ -6,7 +6,7 @@ import pdb, os, argparse
 from scipy import misc
 import time
 
-from model.SPMCNet_models import SPMCNet_VGG
+from model.SPMCNet_models import SPMCNet
 from data import test_dataset
 import imageio
 
@@ -17,8 +17,8 @@ opt = parser.parse_args()
 
 dataset_path = './dataset/COD_CAMO/test/'
 
-model = SPMCNet_VGG()
-model.load_state_dict(torch.load('./models/SPMCNet_VGG/SPMCNet_VGG.pth.40'))
+model = SPMCNet()
+model.load_state_dict(torch.load('./models/SPMCNet/SPMCNet.pth.40'))
 
 model.cuda()
 model.eval()
@@ -26,7 +26,7 @@ model.eval()
 test_datasets = ['COD_CAMO']
 
 for dataset in test_datasets:
-    save_path = './results/VGG/' + dataset + '/'
+    save_path = './results/' + dataset + '/'
     if not os.path.exists(save_path):
         os.makedirs(save_path)
     image_root = dataset_path + '/image/'
