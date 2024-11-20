@@ -7,7 +7,7 @@ import numpy as np
 import pdb, os, argparse
 from datetime import datetime
 
-from model.SPMCNet_models import SPMCNet_VGG
+from model.SPMCNet_models import SPMCNet
 from data import get_loader
 from utils import clip_gradient, adjust_lr
 
@@ -36,7 +36,7 @@ opt = parser.parse_args()
 
 print('Learning Rate: {}'.format(opt.lr))
 # build models
-model = SPMCNet_VGG()
+model = SPMCNet()
 
 model.cuda()
 params = model.parameters()
