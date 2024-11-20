@@ -204,9 +204,9 @@ class HFF_high(nn.Module):
         return x1, x2, x3, x4
 
 
-class SPMCNet_VGG(nn.Module):
+class SPMCNet(nn.Module):
     def __init__(self, channel=32):
-        super(SPMCNet_VGG, self).__init__()
+        super(SPMCNet, self).__init__()
         self.backbone_rgb = pvt_v2_b2()
         self.backbone_depth = pvt_v2_b2()
         self.backbone_rgb.load_state_dict(torch.load('./model/pvt_v2_b2.pth'), strict=False)
